@@ -4,6 +4,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:photo_view_example/screens/app_bar.dart';
 import 'package:photo_view_example/screens/examples/gallery/gallery_example_item.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 
 class GalleryExample extends StatefulWidget {
   @override
@@ -100,14 +101,14 @@ class GalleryPhotoViewWrapper extends StatefulWidget {
     this.initialIndex,
     @required this.galleryItems,
     this.scrollDirection = Axis.horizontal,
-  }) : pageController = PageController(initialPage: initialIndex);
+  }) : pageController = PreloadPageController(initialPage: initialIndex);
 
   final LoadingBuilder loadingBuilder;
   final Decoration backgroundDecoration;
   final dynamic minScale;
   final dynamic maxScale;
   final int initialIndex;
-  final PageController pageController;
+  final PreloadPageController pageController;
   final List<GalleryExampleItem> galleryItems;
   final Axis scrollDirection;
 

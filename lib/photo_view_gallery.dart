@@ -8,12 +8,12 @@ import 'package:photo_view/photo_view.dart'
         PhotoViewImageTapDownCallback,
         PhotoViewImageTapUpCallback,
         ScaleStateCycle;
-
 import 'package:photo_view/src/controller/photo_view_controller.dart';
 import 'package:photo_view/src/controller/photo_view_scalestate_controller.dart';
 import 'package:photo_view/src/core/photo_view_gesture_detector.dart';
 import 'package:photo_view/src/photo_view_scale_state.dart';
 import 'package:photo_view/src/utils/photo_view_hero_attributes.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 
 /// A type definition for a [Function] that receives a index after a page change in [PhotoViewGallery]
 typedef PhotoViewGalleryPageChangedCallback = void Function(int index);
@@ -110,6 +110,7 @@ class PhotoViewGallery extends StatefulWidget {
     this.reverse = false,
     this.pageController,
     this.onPageChanged,
+    this.preloadPagesCount,
     this.scaleStateChangedCallback,
     this.enableRotation = false,
     this.scrollPhysics,
@@ -136,6 +137,7 @@ class PhotoViewGallery extends StatefulWidget {
     this.reverse = false,
     this.pageController,
     this.onPageChanged,
+    this.preloadPagesCount,
     this.scaleStateChangedCallback,
     this.enableRotation = false,
     this.scrollPhysics,
@@ -178,10 +180,12 @@ class PhotoViewGallery extends StatefulWidget {
   final bool reverse;
 
   /// An object that controls the [PageView] inside [PhotoViewGallery]
-  final PageController pageController;
+  final PreloadPageController pageController;
 
   /// An callback to be called on a page change
   final PhotoViewGalleryPageChangedCallback onPageChanged;
+
+  final int preloadPagesCount;
 
   /// Mirror to [PhotoView.scaleStateChangedCallback]
   final ValueChanged<PhotoViewScaleState> scaleStateChangedCallback;
@@ -204,11 +208,11 @@ class PhotoViewGallery extends StatefulWidget {
 }
 
 class _PhotoViewGalleryState extends State<PhotoViewGallery> {
-  PageController _controller;
+  PreloadPageController _controller;
 
   @override
   void initState() {
-    _controller = widget.pageController ?? PageController();
+    _controller = widget.pageController ?? PreloadPageController();
     super.initState();
   }
 
@@ -234,10 +238,11 @@ class _PhotoViewGalleryState extends State<PhotoViewGallery> {
     // Enable corner hit test
     return PhotoViewGestureDetectorScope(
       axis: widget.scrollDirection,
-      child: PageView.builder(
+      child: PreloadPageView.builder(
         reverse: widget.reverse,
         controller: _controller,
         onPageChanged: widget.onPageChanged,
+        preloadPagesCount: widget.preloadPagesCount,
         itemCount: itemCount,
         itemBuilder: _buildItem,
         scrollDirection: widget.scrollDirection,
